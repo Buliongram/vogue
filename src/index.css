@@ -1,0 +1,84 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  transition: all 0.3s;
+  text-decoration: none;
+  font-family: "Poppins", sans-serif;
+}
+
+.explore {
+  display: grid;
+  padding: 1rem;
+  /* grid-template-columns: repeat(3,200px); */
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  justify-content: center;
+}
+@media screen and (max-width: 640px) {
+  .explore {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+  }
+}
+.progress {
+  top: 0;
+  left: 0;
+  height: 10px;
+  box-shadow: 0 0 5px #0000004d;
+  animation: 5s linear infinite bar-progress;
+  background-color: #62c99c;
+  background-size: 1rem 1rem;
+  border-radius: 10px;
+  background-image: linear-gradient(
+    135deg,
+    #40b884 0 25%,
+    #0000 25% 50%,
+    #40b884 50% 75%,
+    #0000 75% 100%
+  );
+}
+@keyframes bar-progress {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: -60px -60px;
+  }
+}
+
+.productCard {
+  display: grid;
+  /* grid-template-columns: repeat(3,200px); */
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-auto-rows: 300px;
+  gap: 1.5rem;
+  padding: 1rem;
+  justify-content: center;
+}
+
+.arrivals {
+  display: grid;
+  /* grid-template-columns: repeat(3,200px); */
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-auto-rows: max-content;
+  gap: 1rem;
+  justify-content: center;
+}
+@media screen and (min-width: 768px) {
+  .arrivals {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+}
+.arrivalCard:hover .arrivalImage1 {
+  display: none;
+}
+.arrivalCard:hover .arrivalImage2 {
+  display: block;
+}
