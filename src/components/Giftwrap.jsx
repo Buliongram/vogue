@@ -19,15 +19,15 @@ export default function Giftwrap({ id, image, name, price, button, increase }) {
         <span>
           <i className="fa-light fa-gift"></i>
         </span>
-        <span className="text-sm font-semibold">
+        <span className="text-xs md:text-sm font-semibold">
           ADD A GIFT WRAP TO YOUR ORDER, FOR $5.00
         </span>
       </span>
 
       <button
         onClick={handleAddCart}
-        className="border border-gray-500 hover:border-transparent bg-white  text-center py-2 px-4 hover:text-white rounded-md uppercase text-sm hover:bg-gray-900 w-max"
-      >
+        className="border border-gray-500 hover:border-transparent bg-white  text-center p-2 md:py-2 md:px-4 hover:text-white rounded-md uppercase text-sm hover:bg-gray-900 w-max"
+      > 
         ADD A GIFT WRAP
       </button>
     </div>

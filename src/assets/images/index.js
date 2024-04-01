@@ -62,6 +62,12 @@ import women from "./women.webp";
 import giftwrap from "./giftwrap.jpg";
 import accessories from "./accessories.jpg";
 import shoes from "./shoes.webp";
+import safecheckout from "./safecheckout.avif";
+import img404 from "./img404.avif";
+import errorwomen from "./errorwomen.webp";
+import errormen from "./errormen.webp";
+import errorshoes from "./errorshoes.jpg";
+import errorkids from "./errorkids.webp";
 
 export {
   banner1,
@@ -128,4 +134,10 @@ export {
   blog1,
   blog2,
   blog3,
+  safecheckout,
+  img404,
+  errorkids,
+  errormen,
+  errorshoes,
+  errorwomen,
 };

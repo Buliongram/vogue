@@ -2,8 +2,8 @@ import React from "react";
 import { Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
-import { topSeller } from "../data/Links";
-import TopSellerCard from "../components/TopSellerCard";
+import { clothing } from "../data/Clothing";
+import Products from "../components/Products";
 
 export default function TopSeller() {
   return (
@@ -22,11 +22,13 @@ export default function TopSeller() {
       direction="horizontal"
       className="overflow-x-hidden w-full py-5"
     >
-      {topSeller.map((seller) => (
-        <SwiperSlide key={seller.id}>
-          <TopSellerCard key={seller.id} {...seller} />
-        </SwiperSlide>
-      ))}
+      {clothing
+        .filter((topseller) => topseller.topSeller === true)
+        .map((seller) => (
+          <SwiperSlide key={seller.id}>
+            <Products key={seller.id} {...seller} />
+          </SwiperSlide>
+        ))}
     </Swiper>
   );
 }

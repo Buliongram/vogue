@@ -201,7 +201,7 @@ export default function Header() {
           id="cartBar"
           className={`fixed ${
             showCartBar ? "right-0" : "-right-full"
-          } z-20  w-[400px] border top-0 bg-white h-full overflow-y-scroll`}
+          } z-20  w-[400px] max-w-full border top-0 bg-white h-full overflow-y-scroll`}
         >
           {/* HIDE CARTBAR */}
           <span

@@ -1,8 +1,9 @@
 import React from "react";
 import { category2, smallbanner1 } from "../assets/images";
-import ArrivalCard from "../components/ArrivalCard";
 import { Link } from "react-router-dom";
 import { arrivals } from "../data/Links";
+import { clothing } from "../data/Clothing";
+import Products from "../components/Products";
 
 export default function Arrivals() {
   return (
@@ -14,13 +15,15 @@ export default function Arrivals() {
         </div>
 
         <div className="arrivals">
-          {arrivals.map((product) => (
-            <ArrivalCard key={product.id} {...product} />
-          ))}
+          {clothing
+            .filter((arrival) => arrival.arrivals === true)
+            .map((product) => (
+              <Products key={product.id} {...product} />
+            ))}
         </div>
 
         <Link
-          to={"/discover"}
+          to={"/new-arrival"}
           className="uppercase text-center py-2 mx-auto mt-10 px-4 bg-gray-900 text-white rounded-md  text-sm hover:bg-primary w-max md:text-lg"
         >
           Discover More

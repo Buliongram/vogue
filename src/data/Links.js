@@ -126,49 +126,49 @@ export const category = [
     id: "1111",
     name: "rpring forward",
     image: category1,
-    path: "/collections/fashion",
+    path: "/new-arrival",
   },
   {
     id: "11112",
     name: "bold moves",
     image: category2,
-    path: "/collections/fashion",
+    path: "/new-arrival",
   },
   {
     id: "11113",
     name: "online exclusives",
     image: category3,
-    path: "/collections/fashion",
+    path: "/new-arrival",
   },
   {
     id: "11114",
     name: "spotlight",
     image: category4,
-    path: "/collections/fashion",
+    path: "/new-arrival",
   },
   {
     id: "11115",
     name: "fresh wears",
     image: category5,
-    path: "/collections/fashion",
+    path: "/new-arrival",
   },
   {
     id: "11116",
     name: "significate",
     image: category6,
-    path: "/collections/fashion",
+    path: "/new-arrival",
   },
   {
     id: "11117",
     name: "trendy",
     image: category7,
-    path: "/collections/fashion",
+    path: "/new-arrival",
   },
   {
     id: "11118",
     name: "supreme",
     image: category8,
-    path: "/collections/fashion",
+    path: "/new-arrival",
   },
 ];
 
@@ -341,24 +341,28 @@ export const more = [
     name: "women",
     full: true,
     image: women,
+    path: "/fashion",
   },
   {
     id: "110000",
     name: "men",
     full: true,
     image: men,
+    path: "/men",
   },
   {
     id: "11002222",
     name: "shoes",
     full: false,
     image: shoes,
+    path: "/newarrivals",
   },
   {
     id: "11002322",
     name: "accessories",
     full: false,
     image: accessories,
+    path: "/accessories",
   },
 ];
 
@@ -445,7 +449,7 @@ export const giftBox = [
 export const blogs = [
   {
     id: "83902480",
-    name: "Spotlights the new rold models",
+    name: "Spotlights the new role models",
     image: blog1,
   },
   {

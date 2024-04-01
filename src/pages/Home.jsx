@@ -1,18 +1,14 @@
 import React from "react";
 import { banner1, banner2, logo1, smallbanner1 } from "../assets/images";
-import { category, productList, topSeller } from "../data/Links";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { addToCart } from "../features/slices/cartSlice";
-import ProductCard from "../components/ProductCard";
-import Featured from "../components/Featured";
 
 import Arrivals from "../sections/Arrivals";
 import More from "../sections/More";
 import LogoSlide from "../components/LogoSlide";
 import TopSeller from "../sections/TopSeller";
-import ExploreCard from "../sections/ExploreCard";
+
 import Article from "../sections/Article";
+import Category from "../sections/Category";
 
 export default function Home() {
   return (
@@ -31,15 +27,16 @@ export default function Home() {
 
         <div className="flex flex-col gap-2 uppercase absolute md:left-16 lg:left-24 md:top-[50%] md:-translate-y-[50%] md:translate-x-0 md:items-start items-center bottom-10 left-[50%] -translate-x-[50%]">
           <span className="text-sm md:text-xl">new collection</span>
-          <span className="flex flex-col text-3xl md:text-6xl capitalize">
+          <span className="flex flex-col text-2xl md:text-6xl capitalize">
             <span className="font-bold">Luxury brands</span> without labels
           </span>
-          <a
+          <Link
+            to={"/fashion"}
             href=""
             className="text-center py-3 mt-3 px-6 bg-gray-900 text-white rounded-md uppercase text-sm md:text-lg hover:bg-primary w-max"
           >
             shop now
-          </a>
+          </Link>
         </div>
       </div>
 
@@ -49,16 +46,10 @@ export default function Home() {
           Explore Top Categories
         </h3>
         <div className="explore">
-          <ExploreCard></ExploreCard>
+          <Category />
         </div>
       </div>
       {/* ////////////////////////////////////////////////??// */}
-
-      {/* PRODUCT CARD SECTION */}
-      <div className="productCard">
-        <Featured></Featured>
-      </div>
-      {/* ///////////////////// */}
 
       <div className="p-4">
         <Arrivals></Arrivals>

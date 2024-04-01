@@ -1,6 +1,6 @@
 import React from "react";
-import { accessories, men, shoes, women } from "../assets/images";
-import { more } from "../data/Links";
+import { Link } from "react-router-dom";
+import { clothing } from "../data/Clothing";
 
 export default function More() {
   return (
@@ -9,22 +9,25 @@ export default function More() {
         There's More to Exlpore
       </span>
       <div className="more grid grid-cols-4 md:grid-cols-6 grid-rows-[repeat(3,150px)] md:grid-rows-[repeat(2,200px)] gap-4 p-4">
-        {more.map((cont) => (
-          <span
-            className={`relative col-span-2 ${
-              cont.full ? "row-span-2" : ""
-            } rounded-md overflow-hidden cursor-pointer group `}
-          >
-            <img
-              className="group-hover:scale-[1.2] object-cover h-full w-full "
-              src={cont.image}
-              alt=""
-            />
-            <span className="absolute bottom-5 left-[50%] -translate-x-[50%] bg-white group-hover:bg-primary group-hover:text-white px-4 py-1 uppercase text-sm font-semibold rounded-sm">
-              {cont.name}
-            </span>
-          </span>
-        ))}
+        {clothing
+          .filter((cart) => cart.more === true)
+          .map((cont) => (
+            <Link
+              to={cont.path}
+              className={`relative col-span-2 ${
+                cont.full ? "row-span-2" : ""
+              } rounded-md overflow-hidden cursor-pointer group `}
+            >
+              <img
+                className="group-hover:scale-[1.2] object-cover h-full w-full "
+                src={cont.image}
+                alt=""
+              />
+              <span className="absolute bottom-5 left-[50%] -translate-x-[50%] bg-white group-hover:bg-primary group-hover:text-white px-4 py-1 uppercase text-sm font-semibold rounded-sm">
+                {cont.name}
+              </span>
+            </Link>
+          ))}
       </div>
     </section>
   );

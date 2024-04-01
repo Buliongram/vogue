@@ -76,9 +76,114 @@
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   }
 }
+@media screen and (max-width: 400px) {
+  .arrivals {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  }
+}
 .arrivalCard:hover .arrivalImage1 {
   display: none;
 }
 .arrivalCard:hover .arrivalImage2 {
   display: block;
+}
+
+.colorCrd {
+  height: 20px;
+  width: 35px;
+  border: 1px solid rgb(207, 207, 207);
+}
+
+.range {
+  -webkit-appearance: none;
+  height: 4px;
+  background: #000;
+  outline: none;
+  border-radius: 10px;
+  -webkit-transition: 0.2s;
+  transition: opacity 0.2s;
+}
+
+.range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #000;
+  cursor: pointer;
+}
+
+.range::-moz-range-thumb {
+  width: 25px;
+  height: 10px;
+  cursor: pointer;
+  border-radius: 50%;
+  background: #04aa6d;
+  cursor: pointer;
+}
+.track {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-auto-rows: max-content;
+  gap: 1rem;
+  justify-content: center;
+}
+@media screen and (max-width: 400px) {
+  .track {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  }
+}
+.newArrivals {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-auto-rows: max-content;
+  gap: 1rem;
+  justify-content: center;
+}
+@media screen and (max-width: 400px) {
+  .newArrivals {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  }
+}
+
+.pulse,
+.impulse {
+  width: 10px;
+  height: 10px;
+  border-radius: 10px;
+  margin-right: 8px;
+  display: inline;
+  background-color: #54c63a;
+  position: relative;
+}
+
+.pulse::before,
+.impulse::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 10px;
+  margin-right: 8px;
+  display: inline;
+  background-color: #54c63a;
+  animation: pulse 2s linear infinite;
+}
+.impulse {
+  background-color: orange;
+}
+.impulse::before {
+  background-color: orange;
+}
+@keyframes pulse {
+  0% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
 }

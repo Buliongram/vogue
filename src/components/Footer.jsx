@@ -93,7 +93,7 @@ export default function Footer() {
           </div>
           <form
             id="formInput"
-            className="bg-white shadow-sm rounded-lg overflow-hidden flex items-center justify-between w-[380px] md:w-full"
+            className="bg-white shadow-sm rounded-lg overflow-hidden flex items-center justify-between w-[380px] md:w-full max-w-full"
             action=""
           >
             <input
@@ -112,7 +112,9 @@ export default function Footer() {
       </div>
 
       <div className="flex md:flex-row gap-3 items-center justify-between flex-col">
-        <div className="text-sm">&copy; 2024 Vogue. All Rignts Reserved.</div>
+        <div className="text-sm">
+          &copy; {new Date().getFullYear()} Vogue. All Rigts Reserved.
+        </div>
         <div className="flex items-center gap-2">
           <img src={card1} width={30} alt="" />
           <img src={card2} width={30} alt="" />

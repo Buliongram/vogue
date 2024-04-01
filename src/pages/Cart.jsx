@@ -36,7 +36,7 @@ export default function Cart({ id, image, name, price }) {
                 <i className="fa-light fa-info-circle"></i>
               </span>
               Please, hurry! Someone has placed an order with same products.
-              These products are limited, checkout within
+              These products are limited.
             </div>
 
             <section className="flex flex-col md:flex-row items-start p-4 gap-0 md:gap-8">
@@ -220,7 +220,7 @@ export default function Cart({ id, image, name, price }) {
                     type="text"
                     className="p-2 border bg-white outline-none rounded-md"
                   />
-                  <span className="text-sm text-gray-500">
+                  <span className="text-xs md:text-sm  text-gray-500">
                     Coupon code will be applied on the checkout page
                   </span>
                 </div>
