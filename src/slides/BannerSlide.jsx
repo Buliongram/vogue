@@ -135,8 +135,8 @@ export default function BannerSlide() {
       <SwiperSlide>
         <div className="relative w-full h-[460px] md:h-[430px]">
           <video
-            loop="true"
-            muted="true"
+            loop={true}
+            muted={true}
             autoPlay
             data-ll-status="loaded"
             src={videobanner}

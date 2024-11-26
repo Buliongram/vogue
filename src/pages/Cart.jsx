@@ -27,14 +27,9 @@ export default function Cart() {
       {cartState.length ? (
         <>
           <div id="cartView" className="flex  flex-col  my-4">
-            <span className="text-center text-3xl w-full mt-3 ">Your Cart</span>
-            <div className="bg-[#d6eadf] my-3 text-sm py-3 px-4 text-center flex gap-2 justify-center items-center">
-              <span className="hidden md:block text-lg">
-                <IoIosInformationCircleOutline />
-              </span>
-              Please, hurry! Someone has placed an order with same products.
-              These products are limited.
-            </div>
+            <span className="text-center text-3xl font-semibold w-full mt-3 ">
+              Your Cart
+            </span>
 
             <section className="flex flex-col lg:flex-row items-start p-4 gap-8">
               <div className=" flex-1 w-full">
@@ -220,18 +215,6 @@ export default function Cart() {
                   rows="5"
                 ></textarea>
 
-                <div className="py-3 flex flex-col gap-2 bg-light relative ">
-                  <span className="text-xs text-center flex items-center gap-2  w-full">
-                    <span className=" text-xl">
-                      <HiOutlineTruck />
-                    </span>
-                    <span className="flex items-center gap-1 font-[500]">
-                      YOUR ORDER IS ELIGIBLE FOR FREE DELIVERY
-                    </span>
-                  </span>
-                  <span className="progress"></span>
-                </div>
-
                 <div className="flex flex-col gap-3">
                   <span className="uppercase text-sm ">coupon code</span>
                   <input
@@ -244,7 +227,7 @@ export default function Cart() {
                 </div>
 
                 <div className="flex flex-col gap-2 py-2 mt-3">
-                  <div className="flex uppercase items-center justify-between font-[700] text-[15px]">
+                  <div className="flex uppercase items-center justify-between font-bold text-[15px]">
                     <span>Total</span>
                     <span id="cartTotal">
                       $
@@ -284,16 +267,19 @@ export default function Cart() {
             </span>
             <span className="text-sm">
               No products in the Cart.
-              <Link className="underline">Continue Shhopping</Link>
+              <Link to={"/fashion"} className="underline">
+                {" "}
+                Continue Shhopping
+              </Link>
             </span>
 
             <div className="flex flex-col items-center mt-5">
               <span className=" text-2xl">Have an account?</span>
               <span className="text-sm">
-                <Link to={"/account"} className="underline">
+                <Link to={"/account/login"} className="underline">
                   Log in
                 </Link>
-                <span>to check out faster.</span>
+                <span> to check out faster.</span>
               </span>
             </div>
           </div>

@@ -5,10 +5,8 @@ import { FaList } from "react-icons/fa6";
 import { PiSlidersHorizontal } from "react-icons/pi";
 import { IoMdClose } from "react-icons/io";
 import { TbCurrencyDollar } from "react-icons/tb";
-import { topSeller } from "../data/Links";
 import { clothLoop, clothing } from "../data/Clothing";
 import Products from "../components/Products";
-import { IoChevronForward } from "react-icons/io5";
 import Paginator from "../components/Paginator";
 
 export default function Women() {
@@ -57,7 +55,7 @@ export default function Women() {
             </span>
             <div className="flex justify-center flex-col gap-6">
               <div className="flex flex-col gap-3">
-                <span className="text-sm font-[600] border-b pb-2">
+                <span className="text-sm font-semibold border-b pb-2">
                   CATEGORIES
                 </span>
                 <div className="flex flex-col gap-2 text-sm">
@@ -70,7 +68,9 @@ export default function Women() {
               </div>
 
               <div className="flex flex-col gap-3">
-                <span className="text-sm font-[600] border-b pb-2">COLOR</span>
+                <span className="text-sm font-semibold border-b pb-2">
+                  COLOR
+                </span>
                 <div className="colors flex gap-2 flex-wrap w-full lg:w-[250px]">
                   <div className="colorCrd bg-[#f5f5dc]"></div>
                   <div className="colorCrd bg-black"></div>
@@ -88,7 +88,9 @@ export default function Women() {
               </div>
 
               <div className="flex flex-col gap-3">
-                <span className="text-sm font-[600] border-b pb-2">PRICE</span>
+                <span className="text-sm font-semibold border-b pb-2">
+                  PRICE
+                </span>
                 <div className="flex items-center justify-between w-[220px]">
                   <div className="flex items-center gap-2 border p-1 rounded-md w-16">
                     <span>
@@ -123,68 +125,6 @@ export default function Women() {
                   />
                 </div>
               </div>
-
-              <div className="flex flex-col gap-3">
-                <span className="text-sm font-[600] border-b pb-2">
-                  PRODUCT TYPE
-                </span>
-                <div className="flex flex-col gap-2">
-                  <div className="flex items-center justify-between">
-                    <span className="flex items-center gap-1 w-full text-sm">
-                      <input type="checkbox" name="" id="skirt" />
-                      <span>Accessories</span>
-                    </span>
-                    <span className="flex items-center gap-1 w-full text-sm">
-                      <input type="checkbox" name="" id="skirt" />
-                      <span>Skirt</span>
-                    </span>
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <span className="flex items-center gap-1 w-full text-sm">
-                      <input type="checkbox" name="" id="skirt" />
-                      <span>Bag</span>
-                    </span>
-                    <span className="flex items-center gap-1 w-full text-sm">
-                      <input type="checkbox" name="" id="skirt" />
-                      <span>Sunglasses</span>
-                    </span>
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <span className="flex items-center gap-1 w-full text-sm">
-                      <input type="checkbox" name="" id="skirt" />
-                      <span>Dress</span>
-                    </span>
-                    <span className="flex items-center gap-1 w-full text-sm">
-                      <input type="checkbox" name="" id="skirt" />
-                      <span>T-Shirts</span>
-                    </span>
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <span className="flex items-center gap-1 w-full text-sm">
-                      <input type="checkbox" name="" id="skirt" />
-                      <span>Jeans</span>
-                    </span>
-                    <span className="flex items-center gap-1 w-full text-sm">
-                      <input type="checkbox" name="" id="skirt" />
-                      <span>Top</span>
-                    </span>
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <span className="flex items-center gap-1 w-full text-sm">
-                      <input type="checkbox" name="" id="skirt" />
-                      <span>Shoes</span>
-                    </span>
-                    <span className="flex items-center gap-1 w-full text-sm">
-                      <input type="checkbox" name="" id="skirt" />
-                      <span>Watch</span>
-                    </span>
-                  </div>
-                </div>
-              </div>
             </div>
           </article>
 
@@ -199,7 +139,7 @@ export default function Women() {
                 </span>
                 <span>FILTER</span>
               </div>
-              <div className="w-full text-center md:text-start text-xs ">
+              <div className="w-full text-center md:text-start text-[16px] ">
                 {cartLength} items
               </div>
               <div className="flex items-center justify-end  gap-4 w-full ">
@@ -214,7 +154,7 @@ export default function Women() {
                 <select
                   defaultValue={"featured"}
                   onChange={(e) => upToDown(e.target.value)}
-                  className=" w-[100px] border p-1 rounded-md outline-none cursor-pointer text-xs"
+                  className=" w-max border p-1 rounded-md outline-none cursor-pointer text-xs"
                   name="filter"
                   id="filter"
                 >

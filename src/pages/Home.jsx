@@ -1,13 +1,4 @@
 import React from "react";
-import {
-  banner1,
-  banner2,
-  logo1,
-  smallbanner1,
-  smallbanner2,
-} from "../assets/images";
-import { Link } from "react-router-dom";
-
 import Arrivals from "../sections/Arrivals";
 import More from "../sections/More";
 import LogoSlide from "../components/LogoSlide";
@@ -15,7 +6,6 @@ import TopSeller from "../sections/TopSeller";
 
 import Article from "../sections/Article";
 import Category from "../sections/Category";
-
 import BannerSlide from "../slides/BannerSlide";
 
 export default function Home() {
@@ -23,8 +13,8 @@ export default function Home() {
     <>
       <BannerSlide />
       {/* EXPLORE CATEGORIES SECTION */}
-      <div className="mt-3">
-        <h3 className="text-center text-xl md:text-3xl py-3 ">
+      <div className="mt-10 ">
+        <h3 className="text-center py-5 text-2xl md:text-3xl font-medium">
           Explore Top Categories
         </h3>
         <div className="explore">
@@ -43,13 +33,17 @@ export default function Home() {
         <LogoSlide></LogoSlide>
       </div>
 
-      <div className="mt-5 p-4">
-        <div className="text-center text-xl md:text-3xl">Top Seller</div>
+      <div className="mt-10 p-4">
+        <div className="text-center text-2xl md:text-3xl font-medium">
+          Top Seller
+        </div>
         <TopSeller></TopSeller>
       </div>
 
-      <div className="flex flex-col gap-4 mt-5 p-4">
-        <div className="text-center text-xl md:text-3xl">News & Articles</div>
+      <div className="flex flex-col gap-4 mt-10 p-4">
+        <div className="text-center text-2xl md:text-3xl font-medium">
+          News & Articles
+        </div>
         <Article></Article>
       </div>
     </>

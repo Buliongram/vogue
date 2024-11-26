@@ -1,60 +1,190 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Paginator from "../components/Paginator";
-import {
-  CiCircleQuestion,
-  CiDeliveryTruck,
-  CiLock,
-  CiShop,
-} from "react-icons/ci";
-import { creditcard, women } from "../assets/images";
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-export default function Checkout() {
+import { CiDeliveryTruck, CiShop } from "react-icons/ci";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import { clearCart } from "../features/slices/cartSlice";
+export default function Checkout({ handleLogOut }) {
+  const dispatch = useDispatch();
   const [delivery, setDelivery] = useState(false);
   const cartState = useSelector((state) => state.cart);
   const shippingFee = 71;
+  const [user, setUser] = useState(null);
+  const userState = useSelector((state) => state.user);
+  const [address, setAddress] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [checkoutType, setCheckoutType] = useState("delivery");
+
+  const getUserAddress = async () => {
+    try {
+      const res = await fetch("http://localhost:3000/address/getUserAddress", {
+        method: "GET",
+        credentials: "include",
+      });
+      if (!userState) {
+        toast.error("Please sign in to complete checkout", { id: "123" });
+        return;
+      }
+      if (!res.ok) {
+        checkoutType === "delivery"
+          ? toast.error("Add delivery address to complete checkout", {
+              id: "123",
+            })
+          : "";
+        return;
+      }
+
+      const data = await res.json();
+      setAddress(data.address);
+    } catch (error) {
+      console.error(error);
+      toast.error(
+        "Something went wrong. Please check your internet connection.",
+        { id: "123" }
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getUser = async () => {
+    try {
+      const res = await fetch("http://localhost:3000/settings/getUser", {
+        method: "GET",
+        credentials: "include",
+      });
+
+      // Ensure response is OK
+      if (!res.ok) {
+        handleLogOut();
+        toast.error("Please sign in to complete checkout", { id: "123" });
+        return;
+      }
+
+      const data = await res.json();
+      setUser(data.user);
+    } catch (error) {
+      console.error(error);
+      toast.error(
+        "Something went wrong. Please check your internet connection.",
+        { id: "123" }
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getUserAddress();
+    getUser();
+  }, []);
+
+  const saveOrder = async (cartState, checkoutType, transactionRef) => {
+    try {
+      const res = await fetch("http://localhost:3000/order/saveOrder", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          orderData: cartState,
+          checkoutType: checkoutType,
+          transactionRef: transactionRef,
+        }),
+      });
+
+      const data = await res.json();
+      if (data.error) {
+        toast.error(data.message, { id: "123" });
+      } else {
+        toast.success(data.message, { id: "123" });
+        dispatch(clearCart());
+        window.location.href = `/dashboard/orderConfirmed/${data.orderId}`;
+      }
+    } catch (error) {
+      console.error("Error saving order:", error);
+      toast.error("Failed to process your order", { id: "123" });
+    }
+  };
+  const cartTotal = useMemo(
+    () =>
+      cartState.reduce(
+        (total, cart) => cart.qty * cart.price + total + shippingFee,
+        0
+      ),
+    [cartState]
+  );
+
+  const paystackPublicKey = "pk_test_ff0a5aed1947def2f42f5bb0c5df9ce9ecc6e6f6"; // Replace with your actual public key
+
+  const handlePaystackPayment = (e) => {
+    e.preventDefault();
+    if (!userState) {
+      toast.error("Please Sign in to complete checkout", { id: "123" });
+      return;
+    }
+    if (!address) {
+      toast.error("Add delivery address to complete checkout", { id: "123" });
+      return;
+    }
+
+    const handler = window.PaystackPop.setup({
+      key: paystackPublicKey,
+      email: user.email,
+      amount: cartTotal * 100,
+      currency: "NGN",
+      callback: (response) => {
+        saveOrder(cartState, checkoutType, response.reference);
+      },
+      onClose: () => {
+        alert("Payment process was canceled");
+      },
+    });
+    handler.openIframe();
+  };
+
+  // Function to verify payment on backend (Optional but recommended)
+  const verifyPaymentOnBackend = async (reference) => {
+    try {
+      const response = await fetch(`/verify-payment/${reference}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.json();
+      if (data.status === "success") {
+        alert("Payment verified successfully!");
+      } else {
+        alert("Payment verification failed.");
+      }
+    } catch (error) {
+      console.error("Error verifying payment:", error);
+    }
+  };
   return (
     <>
       <Paginator />
       <section className="flex flex-col items-center gap-6">
-        <span className="text-center text-3xl w-full mt-3 ">Checkout</span>
+        <span className="text-center text-3xl font-medium w-full mt-3 ">
+          Checkout
+        </span>
 
         {cartState.length ? (
           <>
             <section className="flex items-start w-full flex-col md:flex-row">
               <main className="flex flex-col gap-10 md:pl-16 p-4 md:pr-10 w-full pb-10">
                 <div className="flex flex-col gap-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xl font-[500]">Contact</span>
-                    <Link
-                      to={"/account"}
-                      className="text-sm underline text-primary cursor-pointer"
-                    >
-                      Login
-                    </Link>
-                  </div>
-                  <input
-                    className="border w-full p-2 px-4 placeholder:text-[13px] outline-none focus:border-primary placeholder:text-dark rounded-md"
-                    type="text"
-                    placeholder="Email or mobile phone number "
-                  />
-                  <span className="text-[13px] flex items-center gap-3">
-                    <input
-                      className="outline-none cursor-pointer"
-                      type="checkbox"
-                      name=""
-                      id="saveInfo"
-                    />
-                    <label htmlFor="saveInfo">
-                      Email me with news and offers
-                    </label>
-                  </span>
-                </div>
-                <div className="flex flex-col gap-3">
-                  <span className="text-xl font-[500]">Delivery</span>
+                  <span className="text-xl font-medium">Delivery</span>
                   <div className="flex flex-col w-full text-sm">
                     <div
-                      onClick={() => setDelivery(false)}
+                      onClick={() => {
+                        setDelivery(false);
+                        getUserAddress();
+                        setCheckoutType("delivery");
+                      }}
                       className={`flex items-center justify-between  w-full p-4 border ${
                         delivery ? "" : "bg-green-50 border-primary"
                       } cursor-pointer rounded-t-md`}
@@ -72,7 +202,10 @@ export default function Checkout() {
                       <CiDeliveryTruck className="text-xl" />
                     </div>
                     <div
-                      onClick={() => setDelivery(true)}
+                      onClick={() => {
+                        setDelivery(true);
+                        setCheckoutType("pickup");
+                      }}
                       className={`flex items-center justify-between  w-full p-4 border ${
                         delivery ? "bg-green-50 border-primary" : ""
                       }  cursor-pointer rounded-b-md`}
@@ -90,77 +223,111 @@ export default function Checkout() {
                       <CiShop className="text-xl" />
                     </div>
                   </div>
-                  <main
-                    className={`${
-                      delivery ? "hidden" : "flex"
-                    } flex-col gap-4 mt-6`}
-                  >
-                    <select
-                      className="border w-full py-3 cursor-pointer px-4 text-[13px] outline-none focus:border-primary placeholder:text-dark rounded-md appearance-none"
-                      name=""
-                      id=""
+
+                  {address ? (
+                    <section
+                      className={`${
+                        delivery ? "hidden " : "flex"
+                      } flex-col gap-4 mt-6`}
                     >
-                      <option value="usa">United States</option>
-                      <option value="austria">Austria</option>
-                      <option value="usa">Canada</option>
-                    </select>
-                    <div className="flex items-center gap-4">
-                      <input
-                        placeholder="First Name"
-                        className="border w-full p-2 px-4 placeholder:text-[13px] outline-none focus:border-primary placeholder:text-dark rounded-md"
-                        type="text"
-                      />
-                      <input
-                        placeholder="Last Name"
-                        className="border w-full p-2 px-4 placeholder:text-[13px] outline-none focus:border-primary placeholder:text-dark rounded-md"
-                        type="text"
-                      />
+                      <span className="text-xl font-medium text-left">
+                        Billing Address
+                      </span>
+
+                      {/* ADDRESS DETAILS SECTION */}
+                      <main
+                        className={`${
+                          delivery ? "hidden" : "flex"
+                        } flex-col gap-4`}
+                      >
+                        <input
+                          placeholder="First Name"
+                          className="text-sm border w-full p-2 px-4 placeholder:text-[13px] outline-none focus:border-primary placeholder:text-dark rounded-md"
+                          type="text"
+                          readOnly
+                          value={user?.email}
+                        />
+                        <div className="flex items-center gap-4">
+                          <input
+                            placeholder="First Name"
+                            className="text-sm border w-full p-2 px-4 placeholder:text-[13px] outline-none focus:border-primary placeholder:text-dark rounded-md"
+                            type="text"
+                            readOnly
+                            value={address?.firstname}
+                          />
+                          <input
+                            placeholder="Last Name"
+                            className="text-sm border w-full p-2 px-4 placeholder:text-[13px] outline-none focus:border-primary placeholder:text-dark rounded-md"
+                            type="text"
+                            readOnly
+                            value={address?.lastname}
+                          />
+                        </div>
+
+                        <div className="flex items-center gap-4">
+                          <input
+                            placeholder="Phone number"
+                            className="text-sm border w-full p-2 px-4 placeholder:text-[13px] outline-none focus:border-primary placeholder:text-dark rounded-md"
+                            type="text"
+                            readOnly
+                            value={address?.primaryPhone}
+                          />
+                          <input
+                            placeholder="State"
+                            className="text-sm border w-full p-2 px-4 placeholder:text-[13px] outline-none focus:border-primary placeholder:text-dark rounded-md"
+                            type="text"
+                            readOnly
+                            value={address?.region}
+                          />
+                        </div>
+                        <input
+                          placeholder="State"
+                          className="text-sm border w-full p-2 px-4 placeholder:text-[13px] outline-none focus:border-primary placeholder:text-dark rounded-md"
+                          type="text"
+                          readOnly
+                          value={address?.address}
+                        />
+                      </main>
+
+                      {/* /////////////////////////////////////////////// */}
+                    </section>
+                  ) : !userState ? (
+                    <div className="flex items-center justify-between w-full">
+                      <span className="text-[16px]">Sign in to checkout</span>
+                      <Link
+                        to={"/account/login"}
+                        className="text-sm font-normal text-primary underline cursor-pointer"
+                      >
+                        Sign In
+                      </Link>
                     </div>
-                    <input
-                      placeholder="Address"
-                      className="border w-full p-2 px-4 placeholder:text-[13px] outline-none focus:border-primary placeholder:text-dark rounded-md"
-                      type="text"
-                    />
-                    <input
-                      placeholder="Apartment, suite, etc. (optional)"
-                      className="border w-full p-2 px-4 placeholder:text-[13px] outline-none focus:border-primary placeholder:text-dark rounded-md"
-                      type="text"
-                    />
-                    <div className="flex items-center gap-4">
-                      <input
-                        placeholder="City"
-                        className="border w-full p-2 px-4 placeholder:text-[13px] outline-none focus:border-primary placeholder:text-dark rounded-md"
-                        type="text"
-                      />
-                      <input
-                        placeholder="State"
-                        className="border w-full p-2 px-4 placeholder:text-[13px] outline-none focus:border-primary placeholder:text-dark rounded-md"
-                        type="text"
-                      />
-                      <input
-                        placeholder="Zip code"
-                        className="border w-full p-2 px-4 placeholder:text-[13px] outline-none focus:border-primary placeholder:text-dark rounded-md"
-                        type="number"
-                      />
+                  ) : (
+                    <div
+                      className={`${
+                        delivery ? "hidden" : "flex"
+                      } items-center justify-between w-full mt-6`}
+                    >
+                      <span className="text-[16px] text-left">
+                        Add delivery address to checkout
+                      </span>
+                      <Link
+                        to={"/dashboard/address/create"}
+                        className="text-sm font-normal text-primary underline cursor-pointer"
+                      >
+                        Add Address
+                      </Link>
                     </div>
-                    <span className="text-[13px] flex items-center gap-3">
-                      <input
-                        className="outline-none cursor-pointer"
-                        type="checkbox"
-                        name=""
-                        id="saveInfo"
-                      />
-                      <label htmlFor="saveInfo">
-                        Save this information for next time
-                      </label>
-                    </span>
-                  </main>
+                  )}
+
+                  {/* PICKUP LOCATION SECTION */}
                   <main
                     className={`${
                       delivery ? "flex " : "hidden"
                     } flex-col gap-3 mt-5`}
                   >
-                    <span className="text-sm font-[500]">Pickup Locations</span>
+                    <span className="text-xl font-medium text-left">
+                      Pickup Locations
+                    </span>
                     <span className="text-[13px]">
                       There is 1 store with stock close to your location
                     </span>
@@ -180,125 +347,32 @@ export default function Checkout() {
                       </span>
                     </div>
                   </main>
-                </div>
+                  {/* /////////////////////////////////////////////// */}
 
-                <div className="flex flex-col gap-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xl font-[500]">Payment</span>
-                  </div>
-
-                  <span className="text-[13px]">
-                    All transactions are secure and encrypted.
-                  </span>
-
-                  <form action="" className="flex flex-col">
-                    <span className="flex items-center justify-between p-4 border border-primary rounded-t-md bg-green-50">
-                      <span className="text-[13px]">Credit card</span>
-                      <span>
-                        <img src={creditcard} alt="" />
-                      </span>
-                    </span>
-                    <div className="flex flex-col gap-4 p-4 py-6 bg-gray-50 border rounded-b-md">
-                      <div className="flex items-center border bg-white px-4 rounded-md hover:border-primary">
-                        <input
-                          placeholder="Card number"
-                          className=" w-full py-2.5 placeholder:text-[13px] outline-none placeholder:text-dark "
-                          type="number"
-                        />
-                        <CiLock className="text-xl" />
-                      </div>
-                      <div className="flex items-center gap-4">
-                        <input
-                          placeholder="Expiration date (MM/YY)"
-                          className="border w-full p-2.5 px-4 placeholder:text-[13px] outline-none focus:border-primary placeholder:text-dark rounded-md"
-                          type="number"
-                        />
-
-                        <div className="flex items-center border px-3 hover:border-primary rounded-md">
-                          <input
-                            placeholder="Security code"
-                            className=" w-full py-2.5  placeholder:text-[13px] outline-none placeholder:text-dark "
-                            type="number"
-                            max={3}
-                          />
-                          <CiCircleQuestion className="text-xl" />
-                        </div>
-                      </div>
-                      <input
-                        placeholder="Name on card"
-                        className="border w-full p-2.5 px-4 placeholder:text-[13px] outline-none focus:border-primary placeholder:text-dark rounded-md"
-                        type="text"
-                      />
-                    </div>
-
-                    <main
-                      className={`${
-                        delivery ? "flex" : "hidden"
-                      } flex-col gap-4 mt-6`}
+                  {/* BUTTON TO PROCESS ORDER */}
+                  <div className="flex flex-col gap-3 items-start">
+                    <form
+                      onSubmit={handlePaystackPayment}
+                      className="mt-3 w-full "
                     >
-                      <span className="text-sm font-[500]">
-                        Billing Address
-                      </span>
-                      <select
-                        className="border w-full py-3 cursor-pointer px-4 text-[13px] outline-none focus:border-primary placeholder:text-dark rounded-md appearance-none"
-                        name=""
-                        id=""
+                      <button
+                        type="submit"
+                        className="text-center outline-none py-2.5  px-4 bg-primary text-white rounded-md uppercase text-sm hover:bg-primary w-full"
                       >
-                        <option value="usa">United States</option>
-                        <option value="austria">Austria</option>
-                        <option value="usa">Canada</option>
-                      </select>
-                      <div className="flex items-center gap-4">
-                        <input
-                          placeholder="First Name (optional)"
-                          className="border w-full p-2 px-4 placeholder:text-[13px] outline-none focus:border-primary placeholder:text-dark rounded-md"
-                          type="text"
-                        />
-                        <input
-                          placeholder="Last Name"
-                          className="border w-full p-2 px-4 placeholder:text-[13px] outline-none focus:border-primary placeholder:text-dark rounded-md"
-                          type="text"
-                        />
-                      </div>
-                      <input
-                        placeholder="Address"
-                        className="border w-full p-2 px-4 placeholder:text-[13px] outline-none focus:border-primary placeholder:text-dark rounded-md"
-                        type="text"
-                      />
-                      <input
-                        placeholder="Apartment, suite, etc. (optional)"
-                        className="border w-full p-2 px-4 placeholder:text-[13px] outline-none focus:border-primary placeholder:text-dark rounded-md"
-                        type="text"
-                      />
-                      <div className="flex items-center gap-4">
-                        <input
-                          placeholder="Postl code"
-                          className="border w-full p-2 px-4 placeholder:text-[13px] outline-none focus:border-primary placeholder:text-dark rounded-md"
-                          type="text"
-                        />
-                        <input
-                          placeholder="City"
-                          className="border w-full p-2 px-4 placeholder:text-[13px] outline-none focus:border-primary placeholder:text-dark rounded-md"
-                          type="text"
-                        />
-                      </div>
-                    </main>
-
-                    <button
-                      className="md:text-sm text-xs font-[500] bg-primary px-6 w-full 
-               rounded-md md:py-2.5 py-2 text-white hover:bg-dark outline-none mt-7"
-                      type="submit"
-                    >
-                      Pay Now
-                    </button>
-                  </form>
+                        Place Order
+                      </button>
+                    </form>
+                  </div>
+                  {/* /////////////////////////////////////////////// */}
                 </div>
               </main>
 
+              {/* CART DETAILS SECTION */}
               <main className="max-w-[550px] w-full p-10 bg-gray-50 ">
                 <div className="flex flex-col gap-5">
                   {cartState.map((cart) => (
                     <Link
+                      key={cart.id}
                       to={`/collection/${cart.id}`}
                       className="flex items-center justify-between text-[13px]"
                     >
@@ -316,12 +390,13 @@ export default function Checkout() {
                             {cart.qty}
                           </span>
                         </span>
-                        <span className=" max-w-[390px] font-[500]">
+                        <span className=" max-w-[390px] font-medium">
                           {cart.name}
                         </span>
                       </span>
                       <span>
-                        ${(cart.price * cart.qty).toLocaleString()}.00
+                        &#8358;&nbsp;{(cart.price * cart.qty).toLocaleString()}
+                        .00
                       </span>
                     </Link>
                   ))}
@@ -329,12 +404,12 @@ export default function Checkout() {
 
                 <div className="flex items-center gap-4 mt-10">
                   <input
-                    className="border w-full p-2 px-4 placeholder:text-[13px] outline-none focus:border-primary placeholder:text-dark rounded-md"
+                    className="text-sm border w-full p-2 px-4 placeholder:text-[13px] outline-none focus:border-primary placeholder:text-dark rounded-md"
                     type="text"
                     placeholder="Coupon code"
                   />
                   <button
-                    className="md:text-sm text-xs font-[500] bg-dark px-6 w-max 
+                    className="md:text-sm text-xs font-medium bg-dark px-6 w-max 
                rounded-md md:py-2.5 py-2 text-white hover:bg-primary outline-none"
                   >
                     Apply
@@ -343,7 +418,7 @@ export default function Checkout() {
                 <div className="flex items-center justify-between mt-6">
                   <span className="text-[13px]">Subtotal</span>
                   <span className="text-sm font-semibold">
-                    $
+                    &#8358;&nbsp;
                     {cartState
                       .reduce(
                         (oldTotal, cart) => cart.qty * cart.price + oldTotal,
@@ -355,23 +430,16 @@ export default function Checkout() {
                 </div>
                 <div className="flex items-center justify-between mt-2">
                   <span className="text-[13px]">Shipping</span>
-                  <span className="text-sm font-semibold">$71.00</span>
+                  <span className="text-sm font-semibold"> &#8358; 71.00</span>
                 </div>
                 <div className="flex items-center justify-between mt-2">
-                  <span className="text-lg font-[500]">Total</span>
+                  <span className="text-lg font-medium">Total</span>
                   <span className="text-lg font-semibold">
-                    $
-                    {cartState
-                      .reduce(
-                        (oldTotal, cart) =>
-                          cart.qty * cart.price + oldTotal + shippingFee,
-                        0
-                      )
-                      .toLocaleString()}
-                    .00
+                    &#8358; {cartTotal}.00
                   </span>
                 </div>
               </main>
+              {/* /////////////////////////////////////////////// */}
             </section>
           </>
         ) : (

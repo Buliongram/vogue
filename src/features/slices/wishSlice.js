@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
 
-const initialState = JSON.parse(localStorage.getItem("Vogue__Wishlist")) || [];
+const initialState =
+  JSON.parse(localStorage.getItem("vogueWearsWishlist")) || [];
 
 export const wishSlice = createSlice({
   name: "wishlist",
@@ -17,7 +18,7 @@ export const wishSlice = createSlice({
       } else {
         toast.success("Product added to wishlist", { id: "123" });
         state.push({ ...action.payload, qty: 1 });
-        localStorage.setItem("Vogue__Wishlist", JSON.stringify(state));
+        localStorage.setItem("vogueWearsWishlist", JSON.stringify(state));
       }
     },
 
@@ -25,7 +26,7 @@ export const wishSlice = createSlice({
       const productIndex = state.findIndex((el) => el.id === action.payload.id);
       state.splice(productIndex, 1);
       toast.success("Product removed from wishlist", { id: "123" });
-      localStorage.setItem("Vogue__Wishlist", JSON.stringify(state));
+      localStorage.setItem("vogueWearsWishlist", JSON.stringify(state));
     },
   },
 });

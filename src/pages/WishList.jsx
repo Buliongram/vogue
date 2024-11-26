@@ -1,7 +1,4 @@
-import React, { useState } from "react";
-import { IoChevronForward } from "react-icons/io5";
-import { useDispatch, useSelector } from "react-redux";
-import { clothing } from "../data/Clothing";
+import { useSelector } from "react-redux";
 import Products from "../components/Products";
 import { Link } from "react-router-dom";
 import Paginator from "../components/Paginator";

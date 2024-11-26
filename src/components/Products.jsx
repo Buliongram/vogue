@@ -30,7 +30,7 @@ export default function Products({
   const handleAddCart = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    dispatch(addToCart({ id, image: image[0], name, price }));
+    dispatch(addToCart({ id, image: image[0], name, price, qty: 1 }));
   };
 
   const handleAddToWishlist = (e) => {

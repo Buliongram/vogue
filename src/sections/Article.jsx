@@ -23,7 +23,7 @@ export default function Article() {
       {blogs.map((blog) => (
         <SwiperSlide key={blog.id} className="flex flex-col gap-5 bg-white">
           <img src={blog.image} alt={blog.image} />
-          <span className="font-[500] text-[16px] md:text-[16px] text-center">
+          <span className="font-medium text-[16px] md:text-[16px] text-center">
             {blog.name}
           </span>
         </SwiperSlide>

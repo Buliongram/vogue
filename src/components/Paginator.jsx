@@ -1,6 +1,5 @@
 import React from "react";
 import { IoChevronForward } from "react-icons/io5";
-import { clothing } from "../data/Clothing";
 import { Link } from "react-router-dom";
 
 export default function Paginator() {
@@ -15,7 +14,9 @@ export default function Paginator() {
       <span className="capitalize">
         {window.location.pathname
           .replace("/collections/", `collections  > `)
-          .replace("/", "")}
+          .replace("/", "")
+          .replace("account/login", "account > login")
+          .replace("account/signup", "account > signup")}
       </span>
     </div>
   );

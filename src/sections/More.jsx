@@ -4,8 +4,8 @@ import { clothing } from "../data/Clothing";
 
 export default function More() {
   return (
-    <section className="flex flex-col gap-2 mt-8">
-      <span className="text-center text-xl md:text-3xl">
+    <section className="flex flex-col gap-2 mt-12">
+      <span className="text-center text-2xl md:text-3xl font-medium">
         There's More to Exlpore
       </span>
       <div className="more grid grid-cols-4 md:grid-cols-6 grid-rows-[repeat(3,150px)] md:grid-rows-[repeat(2,200px)] gap-4 p-4">

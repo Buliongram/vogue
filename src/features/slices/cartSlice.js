@@ -1,27 +1,23 @@
 import { createSlice } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
 
-const initialState = JSON.parse(localStorage.getItem("Vogue__Cart")) || [];
+const initialState = JSON.parse(localStorage.getItem("vogueWearsCart")) || [];
 
 export const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
     addToCart: (state, action) => {
-      //find if the item has already been added to the cart
-      const findInCart = state.findIndex((el) => el.id === action.payload.id);
-      //   if the product is already in the cart
-      if (findInCart > -1) {
-        state.forEach((el) => {
-          toast.success("Product added to cart", { id: "123" });
-          if (el.id === action.payload.id) el.qty = el.qty + 1;
-          localStorage.setItem("Vogue__Cart", JSON.stringify(state));
-        });
+      const findInCart = state.find((el) => el.id === action.payload.id);
+
+      if (findInCart) {
+        findInCart.qty += action.payload.qty;
+        toast.success("Product quantity updated in cart", { id: "123" });
       } else {
+        state.push({ ...action.payload });
         toast.success("Product added to cart", { id: "123" });
-        state.push({ ...action.payload, qty: 1 });
-        localStorage.setItem("Vogue__Cart", JSON.stringify(state));
       }
+      localStorage.setItem("vogueWearsCart", JSON.stringify(state));
     },
     // DECREASE IN CART
     changeInCart(state, action) {
@@ -29,8 +25,8 @@ export const cartSlice = createSlice({
       state.forEach((el) => {
         if (el.id === action.payload.id) el.qty = Number(action.payload.qty);
       });
-      oast.success("Item quantity has been updated", { id: "123" });
-      localStorage.setItem("Vogue__Cart", JSON.stringify(state));
+      toast.success("Item quantity has been updated", { id: "123" });
+      localStorage.setItem("vogueWearsCart", JSON.stringify(state));
     },
 
     // REMOVE FROM CART
@@ -38,7 +34,7 @@ export const cartSlice = createSlice({
       const productIndex = state.findIndex((el) => el.id === action.payload.id);
       state.splice(productIndex, 1);
       toast.success("Product removed from cart", { id: "123" });
-      localStorage.setItem("Vogue__Cart", JSON.stringify(state));
+      localStorage.setItem("vogueWearsCart", JSON.stringify(state));
     },
 
     decreaseInCart(state, action) {
@@ -47,14 +43,14 @@ export const cartSlice = createSlice({
           return;
         } else if (el.id === action.payload.id) el.qty = el.qty - 1;
         toast.success("Item quantity has been updated", { id: "123" });
-        localStorage.setItem("Vogue__Cart", JSON.stringify(state));
+        localStorage.setItem("vogueWearsCart", JSON.stringify(state));
       });
     },
     increaseInCart(state, action) {
       state.forEach((el) => {
         if (el.id === action.payload.id) el.qty = el.qty + 1;
         toast.success("Item quantity has been updated", { id: "123" });
-        localStorage.setItem("Vogue__Cart", JSON.stringify(state));
+        localStorage.setItem("vogueWearsCart", JSON.stringify(state));
       });
     },
 
@@ -63,7 +59,12 @@ export const cartSlice = createSlice({
         id: "123",
       });
       state.push({ ...action.payload, qty: 1 });
-      localStorage.setItem("Vogue__Cart", JSON.stringify(state));
+      localStorage.setItem("vogueWearsCart", JSON.stringify(state));
+    },
+
+    clearCart: (state) => {
+      state.length = 0;
+      localStorage.setItem("mandyzCart", JSON.stringify(state)); // Update localStorage
     },
   },
 });
@@ -75,5 +76,6 @@ export const {
   decreaseInCart,
   increaseInCart,
   addGiftToCart,
+  clearCart,
 } = cartSlice.actions;
 export default cartSlice.reducer;

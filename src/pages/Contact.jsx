@@ -4,25 +4,21 @@ import { canada, contactbanner, tokyo, ukflag, usa } from "../assets/images";
 import {
   FaFacebook,
   FaInstagram,
-  FaTwitter,
   FaXTwitter,
   FaYoutube,
 } from "react-icons/fa6";
-import axios from "axios";
 import toast from "react-hot-toast";
 export default function Contact() {
   const [inputs, setInputs] = useState({
-    name: "",
+    fullname: "",
     email: "",
     phone: "",
-    subject: "",
     message: "",
   });
 
   const handleChange = (e) => {
     setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
-  const formRef = useRef(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -30,14 +26,27 @@ export default function Contact() {
     toast.loading("Sending your message...", { id: "123" });
 
     try {
-      const res = await axios.post(
-        `http://localhost:3000/contact/save`,
-        inputs
-      );
+      const res = await fetch(`http://localhost:3000/contact/create`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        credentials: "include",
+        body: JSON.stringify(inputs),
+      });
 
-      const data = res.data;
-      if (data.error) toast.error(data.message, { id: "123" });
-      else toast.success(data.message, { id: "123" });
+      const data = await res.json();
+      if (data.error) {
+        toast.error(data.message, { id: "123" });
+      } else {
+        toast.success(data.message, { id: "123" });
+        setInputs({
+          fullname: "",
+          email: "",
+          phone: "",
+          message: "",
+        });
+      }
     } catch (error) {
       console.log({ error });
       toast.error("An unknown error occured. Please try again  ", {
@@ -47,7 +56,7 @@ export default function Contact() {
   };
   return (
     <>
-      <header className="relative h-[100px] text-white md:h-[120px] lg:h-[170px] overflow-hidden w-full flex items-center justify-center  opacity">
+      <main className="relative h-[100px] text-white md:h-[120px] lg:h-[170px] overflow-hidden w-full flex items-center justify-center  opacity">
         <img
           className="absolute top-0 left-0 w-full h-full -z-10 "
           src={contactbanner}
@@ -61,36 +70,32 @@ export default function Contact() {
             We love to hear from you on our customer service
           </span>
         </div>
-      </header>
+      </main>
       <Paginator />
-      <section className="flex items-center flex-col lg:flex-row gap-10 p-4 lg:p-10">
+      <section className="flex lg:items-center flex-col lg:flex-row gap-10 p-4 lg:p-10">
         <main
           className="flex flex-col gap-6 items-center w-full
         "
         >
-          <span className="text-lg md:text-xl lg:text-2xl font-[500]">
+          <span className="text-lg md:text-xl lg:text-2xl font-medium">
             Drop Us A Line
           </span>
-          <form
-            onSubmit={handleSubmit}
-            ref={formRef}
-            className="flex flex-col gap-4 w-full"
-          >
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full">
             <div className="flex items-center gap-4 w-full">
               <input
                 onChange={handleChange}
                 required
-                value={inputs.name}
-                className="border w-full p-2 px-4 placeholder:text-sm outline-none focus:border-primary placeholder:text-dark"
-                name="name"
+                value={inputs.fullname}
+                className="border w-full p-2 px-4 placeholder:text-sm outline-none rounded-lg focus:border-primary placeholder:text-dark"
+                name="fullname"
                 type="text"
-                placeholder="Name"
+                placeholder="Fullname"
               />
               <input
                 required
                 onChange={handleChange}
                 value={inputs.email}
-                className="border w-full p-2 px-4 placeholder:text-sm outline-none focus:border-primary placeholder:text-dark"
+                className="border w-full p-2 px-4 placeholder:text-sm outline-none rounded-lg focus:border-primary placeholder:text-dark"
                 name="email"
                 type="email"
                 placeholder="Email"
@@ -100,25 +105,17 @@ export default function Contact() {
               required
               onChange={handleChange}
               value={inputs.phone}
-              className="border p-2 px-4 placeholder:text-sm outline-none focus:border-primary placeholder:text-dark"
+              className="border p-2 px-4 placeholder:text-sm outline-none focus:border-primary placeholder:text-dark rounded-lg"
               name="phone"
               type="number"
               placeholder="Phone Number"
             />
-            <input
-              required
-              onChange={handleChange}
-              value={inputs.subject}
-              className="border p-2 px-4 placeholder:text-sm outline-none focus:border-primary placeholder:text-dark"
-              name="subject"
-              type="text"
-              placeholder="Subject"
-            />
+
             <textarea
               required
               onChange={handleChange}
               value={inputs.message}
-              className="border p-2 px-4 placeholder:text-sm outline-none focus:border-primary placeholder:text-dark"
+              className="border p-2 px-4 placeholder:text-sm outline-none focus:border-primary placeholder:text-dark rounded-lg"
               name="message"
               id=""
               cols="30"
@@ -127,7 +124,7 @@ export default function Contact() {
             ></textarea>
             <button
               type="submit "
-              className="text-sm font-[500] bg-dark p-2 py-2.5 text-white hover:bg-primary"
+              className="text-sm font-medium bg-dark p-2 py-2.5 text-white hover:bg-primary"
             >
               SEND MESSAGE
             </button>
@@ -135,16 +132,16 @@ export default function Contact() {
         </main>
         <main className="flex flex-col gap-6 lg:gap-10 max-w-[400px] w-full text-[12px] md:text-sm">
           <div className="flex flex-col gap-4 ">
-            <span className="text-sm md:text-lg font-[500]">Address : </span>
+            <span className="text-sm md:text-lg font-medium">Address : </span>
             <span className="flex flex-col gap-3">
               <span> 55 Gallaxy Enque, 2568 steet, 23568 NY</span>
               <span>PHONE: +1 (440) 568 4568 </span>
-              <span>EMAIL: sales@yousite.com </span>
+              <span>EMAIL: info@voguwears.store </span>
             </span>
           </div>
           <div className="flex flex-col gap-4">
-            <span className="text-sm md:text-lg font-[500]">
-              Opening Time :{" "}
+            <span className="text-sm md:text-lg font-medium">
+              Opening Time :
             </span>
             <span className="flex flex-col gap-3">
               <span>Mon - Sat : 9am - 11pm</span>
@@ -152,7 +149,7 @@ export default function Contact() {
             </span>
           </div>
           <div className="flex flex-col gap-4">
-            <span className="text-sm md:text-lg font-[500]">
+            <span className="text-sm md:text-lg font-medium">
               Stay Connected
             </span>
             <div className="flex items-center gap-4 text-sm">
@@ -166,7 +163,7 @@ export default function Contact() {
       </section>
 
       <section className="flex flex-col gap-6 lg:gap-14 items-center mt-10 p-4">
-        <span className="text-lg md:text-xl lg:text-2xl font-[500]">
+        <span className="text-lg md:text-xl lg:text-2xl font-medium">
           Global Offices
         </span>
         <main className="flex items-center gap-10 flex-col lg:flex-row justify-between w-full">

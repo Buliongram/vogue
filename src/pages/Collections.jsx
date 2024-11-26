@@ -72,7 +72,7 @@ export default function Collections() {
                 </span>
                 <div className="flex justify-center flex-col gap-6">
                   <div className="flex flex-col gap-3">
-                    <span className="text-sm font-[600] border-b pb-2">
+                    <span className="text-sm font-semibold border-b pb-2">
                       CATEGORIES
                     </span>
                     <div className="flex flex-col gap-2 text-sm">
@@ -85,7 +85,7 @@ export default function Collections() {
                   </div>
 
                   <div className="flex flex-col gap-3">
-                    <span className="text-sm font-[600] border-b pb-2">
+                    <span className="text-sm font-semibold border-b pb-2">
                       COLOR
                     </span>
                     <div className="colors flex gap-2 flex-wrap w-full lg:w-[250px]">
@@ -105,7 +105,7 @@ export default function Collections() {
                   </div>
 
                   <div className="flex flex-col gap-3">
-                    <span className="text-sm font-[600] border-b pb-2">
+                    <span className="text-sm font-semibold border-b pb-2">
                       PRICE
                     </span>
                     <div className="flex items-center justify-between w-[220px]">
@@ -144,7 +144,7 @@ export default function Collections() {
                   </div>
 
                   <div className="flex flex-col gap-3">
-                    <span className="text-sm font-[600] border-b pb-2">
+                    <span className="text-sm font-semibold border-b pb-2">
                       PRODUCT TYPE
                     </span>
                     <div className="flex flex-col gap-2">

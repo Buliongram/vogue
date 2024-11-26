@@ -2,23 +2,20 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { CiStar } from "react-icons/ci";
-import { SlCalender } from "react-icons/sl";
 
 import { safecheckout } from "../assets/images";
-import { clothLoop, clothing } from "../data/Clothing";
+import { clothLoop } from "../data/Clothing";
 import { FaStar } from "react-icons/fa6";
 import { AiOutlineQuestionCircle } from "react-icons/ai";
-import { HiOutlineMinus, HiOutlinePlus, HiOutlineTruck } from "react-icons/hi2";
+import { HiOutlineMinus, HiOutlinePlus } from "react-icons/hi2";
 import { IoIosHeart, IoIosHeartEmpty } from "react-icons/io";
 import { addToCart } from "../features/slices/cartSlice";
 
 import { IoChevronForward } from "react-icons/io5";
-import {
-  addToWishlist,
-  removeFromWishlist,
-} from "../features/slices/wishSlice";
+import { addToWishlist } from "../features/slices/wishSlice";
 
 export default function SingleCollection() {
+  const [qty, setQty] = useState(1);
   const params = useParams();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -34,6 +31,7 @@ export default function SingleCollection() {
         image: data?.image[0],
         name: data?.name,
         price: data?.price,
+        qty: qty,
       })
     );
   };
@@ -200,6 +198,7 @@ export default function SingleCollection() {
               <div className="flex items-center w-full justify-between gap-3 mt-6">
                 <div className="flex">
                   <button
+                    onClick={() => setQty(qty <= 1 ? 1 : qty - 1)}
                     id="minus"
                     className="rounded-s flex items-center justify-center   border w-7 h-7"
                   >
@@ -208,14 +207,17 @@ export default function SingleCollection() {
                   <span className="border w-10 h-7">
                     <input
                       min="1"
-                      value={1}
+                      value={qty}
                       className="appearance-none outline-none w-full h-full text-center"
-                      type="text"
-                      name=""
-                      id="quantity"
+                      type="number"
+                      onChange={(e) => {
+                        const value = parseInt(e.target.value, 10);
+                        setQty(value > 0 ? value : 1);
+                      }}
                     />
                   </span>
                   <button
+                    onClick={() => setQty(qty + 1)}
                     id="plus"
                     className="rounded-e flex items-center justify-center  border w-7 h-7"
                   >
@@ -261,26 +263,6 @@ export default function SingleCollection() {
               >
                 add to cart
               </button>
-
-              <div className="py-3 px-4 flex flex-col gap-2 mt-2 bg-light relative">
-                <span className="text-xs text-center flex items-center justify-center gap-2 ">
-                  <span className=" text-xl">
-                    <HiOutlineTruck />
-                  </span>{" "}
-                  <span>
-                    YOUR ORDER IS ELIGIBLE FOR{" "}
-                    <span className="font-semibold">FREE DELIVERY</span>.
-                  </span>
-                </span>
-                <span className="progress"></span>
-              </div>
-
-              <div className="flex items-center gap-2 mt-2">
-                <SlCalender className="text-sm" />
-                <span className="text-xs">
-                  Estimated delivery between 04 April - 10 April.
-                </span>
-              </div>
               <div className="mt-7">
                 <img src={safecheckout} alt="" />
               </div>
